@@ -35,9 +35,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import coil3.compose.AsyncImage
 import com.example.stackoverflowusers.R
+import com.example.stackoverflowusers.data.User
 
 class MainFragment : Fragment() {
 
@@ -58,13 +61,6 @@ class MainFragment : Fragment() {
         }
     }
 }
-
-private data class User(
-    val id: Long,
-    val name: String,
-    val reputation: Int,
-    val profileImage: String?,
-)
 
 private val users = listOf(
     User(1, "Name1", 123, null),
@@ -117,7 +113,11 @@ private fun UserRow(
             if (user.profileImage == null) {
                 Text(text = user.name.first().uppercase())
             } else {
-                // TODO load image from url at user.profileImage
+                AsyncImage(
+                    model = user.profileImage,
+                    contentDescription = user.name,
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
         }
         Column(modifier = Modifier.weight(1f)) {
@@ -133,5 +133,13 @@ private fun UserRow(
         } else {
             Button(onClick = onToggleFollow) { Text(stringResource(R.string.follow)) }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserListScreenPreview() {
+    MaterialTheme {
+        UserListScreen()
     }
 }
