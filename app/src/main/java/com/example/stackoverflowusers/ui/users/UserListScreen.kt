@@ -6,18 +6,23 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -40,10 +45,10 @@ import com.example.stackoverflowusers.data.User
 
 @Composable
 fun UserListScreen(viewModel: UserListViewModel = viewModel()) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val followed by viewModel.followed.collectAsStateWithLifecycle()
     UserListContent(
-        state = state,
+        uiState = uiState,
         followed = followed,
         onToggleFollow = viewModel::toggleFollow,
         onRetry = viewModel::loadUsers,
@@ -52,15 +57,17 @@ fun UserListScreen(viewModel: UserListViewModel = viewModel()) {
 
 @Composable
 private fun UserListContent(
-    state: UsersUiState,
-    followed: Set<Long>,
-    onToggleFollow: (Long) -> Unit,
+    uiState: UsersUiState,
+    followed: Set<Int>,
+    onToggleFollow: (Int) -> Unit,
     onRetry: () -> Unit,
 ) {
-    Surface(modifier = Modifier
-        .fillMaxSize()
-        .safeDrawingPadding()) {
-        when (state) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .safeDrawingPadding()
+    ) {
+        when (uiState) {
             UsersUiState.Loading -> Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center,
@@ -75,13 +82,15 @@ private fun UserListContent(
                 contentAlignment = Alignment.Center,
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = state.message ?: stringResource(R.string.failed_to_retrieve_users))
+                    Text(
+                        text = uiState.message ?: stringResource(R.string.failed_to_retrieve_users)
+                    )
                     TextButton(onClick = onRetry) { Text(text = stringResource(R.string.retry)) }
                 }
             }
 
             is UsersUiState.Success -> LazyColumn(contentPadding = PaddingValues(vertical = 8.dp)) {
-                items(state.users, key = { it.userId }) { user ->
+                items(uiState.users, key = { it.userId }) { user ->
                     UserRow(
                         user = user,
                         isFollowed = user.userId in followed,
@@ -126,11 +135,20 @@ private fun UserRow(
             }
         }
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = user.displayName)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = user.displayName)
+                if (isFollowed) {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = stringResource(R.string.following),
+                    )
+                }
+            }
             Text(text = stringResource(R.string.reputation, user.reputation))
         }
         if (isFollowed) {
-            FilledTonalButton(onClick = onToggleFollow) { Text(stringResource(R.string.following)) }
+            FilledTonalButton(onClick = onToggleFollow) { Text(stringResource(R.string.unfollow)) }
         } else {
             Button(onClick = onToggleFollow) { Text(stringResource(R.string.follow)) }
         }
@@ -146,8 +164,8 @@ private fun UserListScreenPreview() {
     )
     MaterialTheme {
         UserListContent(
-            state = UsersUiState.Success(sample),
-            followed = setOf(1L),
+            uiState = UsersUiState.Success(sample),
+            followed = setOf(1),
             onToggleFollow = {},
             onRetry = {},
         )

@@ -2,14 +2,16 @@ package com.example.stackoverflowusers.ui.users
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.stackoverflowusers.data.FollowRepository
 import com.example.stackoverflowusers.data.User
 import com.example.stackoverflowusers.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 sealed interface UsersUiState {
@@ -20,14 +22,19 @@ sealed interface UsersUiState {
 
 @HiltViewModel
 class UserListViewModel @Inject constructor(
-    private val repository: UserRepository,
+    private val userRepository: UserRepository,
+    private val followRepository: FollowRepository,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<UsersUiState>(UsersUiState.Loading)
-    val state: StateFlow<UsersUiState> = _state.asStateFlow()
+    private val _uiState = MutableStateFlow<UsersUiState>(UsersUiState.Loading)
+    val uiState: StateFlow<UsersUiState> = _uiState.asStateFlow()
 
-    private val _followed = MutableStateFlow<Set<Long>>(emptySet())
-    val followed: StateFlow<Set<Long>> = _followed.asStateFlow()
+    val followed: StateFlow<Set<Int>> = followRepository.followedUserIds
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptySet(),
+        )
 
     init {
         loadUsers()
@@ -35,18 +42,16 @@ class UserListViewModel @Inject constructor(
 
     fun loadUsers() {
         viewModelScope.launch {
-            _state.value = UsersUiState.Loading
-            _state.value = try {
-                UsersUiState.Success(repository.getUsers())
+            _uiState.value = UsersUiState.Loading
+            _uiState.value = try {
+                UsersUiState.Success(userRepository.getUsers())
             } catch (t: Throwable) {
                 UsersUiState.Error(t.message)
             }
         }
     }
 
-    fun toggleFollow(userId: Long) {
-        _followed.update { current ->
-            if (userId in current) current - userId else current + userId
-        }
+    fun toggleFollow(userId: Int) {
+        viewModelScope.launch { followRepository.toggle(userId) }
     }
 }

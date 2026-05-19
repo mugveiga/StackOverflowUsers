@@ -3,6 +3,7 @@
     <string name="reputation">Reputation: %1$s</string>
     <string name="following">Following</string>
     <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
     <string name="retry">Retry</string>
     <string name="failed_to_retrieve_users">Failed to retrieve users</string>
 </resources>
