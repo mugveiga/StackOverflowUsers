@@ -1,8 +1,10 @@
 package com.example.stackoverflowusers.data
 
+import com.google.gson.annotations.SerializedName
+
 data class User(
-    val id: Long,
-    val name: String,
+    @SerializedName("user_id") val userId: Long,
+    @SerializedName("display_name") val displayName: String,
     val reputation: Int,
-    val profileImage: String?,
+    @SerializedName("profile_image") val profileImage: String?,
 )

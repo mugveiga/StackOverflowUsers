@@ -43,6 +43,8 @@ dependencies {
     // android
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     // compose
     implementation(platform(libs.androidx.compose.bom))
@@ -55,6 +57,10 @@ dependencies {
     // image
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // network
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
 
     // test
     testImplementation(libs.junit)
