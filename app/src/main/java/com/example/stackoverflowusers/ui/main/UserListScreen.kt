@@ -1,9 +1,5 @@
 package com.example.stackoverflowusers.ui.main
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,35 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
 import coil3.compose.AsyncImage
 import com.example.stackoverflowusers.R
 import com.example.stackoverflowusers.data.User
-
-class MainFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View = ComposeView(requireContext()).apply {
-        setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        setContent {
-            MaterialTheme {
-                UserListScreen()
-            }
-        }
-    }
-}
 
 private val users = listOf(
     User(1, "Name1", 123, null),
@@ -68,9 +43,9 @@ private val users = listOf(
 )
 
 @Composable
-private fun UserListScreen() {
+fun UserListScreen() {
     var followed by remember { mutableStateOf(emptySet<Long>()) }
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Surface(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
         LazyColumn(contentPadding = PaddingValues(vertical = 8.dp)) {
             items(users, key = { it.id }) { user ->
                 UserRow(
@@ -116,17 +91,14 @@ private fun UserRow(
                 AsyncImage(
                     model = user.profileImage,
                     contentDescription = user.name,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
         }
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = user.name,
-            )
-            Text(
-                text = stringResource(R.string.reputation, user.reputation),
-            )
+            Text(text = user.name)
+            Text(text = stringResource(R.string.reputation, user.reputation))
         }
         if (isFollowed) {
             FilledTonalButton(onClick = onToggleFollow) { Text(stringResource(R.string.following)) }
