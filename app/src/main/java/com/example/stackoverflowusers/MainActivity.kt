@@ -5,12 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.stackoverflowusers.data.ServiceLocator
-import com.example.stackoverflowusers.ui.main.MainViewModel
-import com.example.stackoverflowusers.ui.main.MainViewModelFactory
-import com.example.stackoverflowusers.ui.main.UserListScreen
+import com.example.stackoverflowusers.ui.users.UserListScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,10 +16,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MaterialTheme {
-                val viewModel: MainViewModel = viewModel(
-                    factory = MainViewModelFactory(ServiceLocator.userRepository),
-                )
-                UserListScreen(viewModel)
+                UserListScreen()
             }
         }
     }

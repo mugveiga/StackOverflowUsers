@@ -1,9 +1,11 @@
-package com.example.stackoverflowusers.ui.main
+package com.example.stackoverflowusers.ui.users
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stackoverflowusers.data.User
 import com.example.stackoverflowusers.data.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +18,10 @@ sealed interface UsersUiState {
     data class Error(val message: String?) : UsersUiState
 }
 
-class MainViewModel(private val repository: UserRepository) : ViewModel() {
+@HiltViewModel
+class UserListViewModel @Inject constructor(
+    private val repository: UserRepository,
+) : ViewModel() {
 
     private val _state = MutableStateFlow<UsersUiState>(UsersUiState.Loading)
     val state: StateFlow<UsersUiState> = _state.asStateFlow()

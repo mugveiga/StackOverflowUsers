@@ -1,4 +1,4 @@
-package com.example.stackoverflowusers.ui.main
+package com.example.stackoverflowusers.ui.users
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,12 +33,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.example.stackoverflowusers.R
 import com.example.stackoverflowusers.data.User
 
 @Composable
-fun UserListScreen(viewModel: MainViewModel) {
+fun UserListScreen(viewModel: UserListViewModel = viewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val followed by viewModel.followed.collectAsStateWithLifecycle()
     UserListContent(
