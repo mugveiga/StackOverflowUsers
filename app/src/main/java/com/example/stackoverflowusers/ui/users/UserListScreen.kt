@@ -56,7 +56,7 @@ fun UserListScreen(viewModel: UserListViewModel = viewModel()) {
 }
 
 @Composable
-private fun UserListContent(
+internal fun UserListContent(
     uiState: UsersUiState,
     followed: Set<Int>,
     onToggleFollow: (Int) -> Unit,
@@ -104,7 +104,7 @@ private fun UserListContent(
 }
 
 @Composable
-private fun UserRow(
+internal fun UserRow(
     user: User,
     isFollowed: Boolean,
     onToggleFollow: () -> Unit,
