@@ -2,8 +2,8 @@ package com.example.stackoverflowusers.ui.users
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.stackoverflowusers.data.FollowRepository
-import com.example.stackoverflowusers.data.UserRepository
+import com.example.stackoverflowusers.data.repository.FollowRepository
+import com.example.stackoverflowusers.data.repository.UserRepository
 import com.example.stackoverflowusers.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

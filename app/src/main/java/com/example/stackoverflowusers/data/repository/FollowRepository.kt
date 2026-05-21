@@ -1,14 +1,12 @@
-package com.example.stackoverflowusers.data
+package com.example.stackoverflowusers.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlin.also
 
 @Singleton
 class FollowRepository @Inject constructor(

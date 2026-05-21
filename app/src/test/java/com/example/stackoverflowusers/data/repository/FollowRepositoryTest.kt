@@ -1,4 +1,4 @@
-package com.example.stackoverflowusers.data
+package com.example.stackoverflowusers.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory

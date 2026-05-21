@@ -1,6 +1,6 @@
 package com.example.stackoverflowusers.di
 
-import com.example.stackoverflowusers.data.StackExchangeApi
+import com.example.stackoverflowusers.data.remote.StackExchangeApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

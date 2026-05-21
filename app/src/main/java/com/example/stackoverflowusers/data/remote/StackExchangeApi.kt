@@ -1,4 +1,4 @@
-package com.example.stackoverflowusers.data
+package com.example.stackoverflowusers.data.remote
 
 import retrofit2.http.GET
 import retrofit2.http.Query

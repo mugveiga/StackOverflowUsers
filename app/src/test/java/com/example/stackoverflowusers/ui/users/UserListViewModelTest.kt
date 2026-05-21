@@ -1,8 +1,8 @@
 package com.example.stackoverflowusers.ui.users
 
-import com.example.stackoverflowusers.data.FollowRepository
 import com.example.stackoverflowusers.data.User
-import com.example.stackoverflowusers.data.UserRepository
+import com.example.stackoverflowusers.data.repository.FollowRepository
+import com.example.stackoverflowusers.data.repository.UserRepository
 import com.example.stackoverflowusers.testutil.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -31,7 +31,7 @@ class UserListViewModelTest {
     private val userRepository: UserRepository = mock()
     private val followRepository: FollowRepository = mock()
 
-    private val sampleUser = User(userId = 1, displayName = "name", reputation = 100, profileImage = null)
+    private val sampleUser = User(id = 1, name = "name", reputation = 100, profileImage = null)
 
     @Test
     fun `initial uiState is Loading before load completes`() = runTest(testDispatcher) {

@@ -90,11 +90,11 @@ internal fun UserListContent(
             }
 
             is UsersUiState.Success -> LazyColumn(contentPadding = PaddingValues(vertical = 8.dp)) {
-                items(uiState.users, key = { it.userId }) { user ->
+                items(uiState.users, key = { it.id }) { user ->
                     UserRow(
                         user = user,
-                        isFollowed = user.userId in followed,
-                        onToggleFollow = { onToggleFollow(user.userId) },
+                        isFollowed = user.id in followed,
+                        onToggleFollow = { onToggleFollow(user.id) },
                     )
                     HorizontalDivider()
                 }
@@ -124,11 +124,11 @@ internal fun UserRow(
             contentAlignment = Alignment.Center,
         ) {
             if (user.profileImage == null) {
-                Text(text = user.displayName.first().uppercase())
+                Text(text = user.name.first().uppercase())
             } else {
                 AsyncImage(
                     model = user.profileImage,
-                    contentDescription = user.displayName,
+                    contentDescription = user.name,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize(),
                 )
@@ -136,7 +136,7 @@ internal fun UserRow(
         }
         Column(modifier = Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = user.displayName)
+                Text(text = user.name)
                 if (isFollowed) {
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(
