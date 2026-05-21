@@ -1,7 +1,7 @@
 # StackOverflowUsers
 An Android application that fetches a list of StackOverflow users and displays it in a list on the screen.
 
-![user list](docs/screenshot.png)
+<img src="docs/screenshot.png" width="240" />
 
 ## Objective
 Demonstrate the usage of Android app coding elements:
